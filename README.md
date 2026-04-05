@@ -178,6 +178,27 @@ async def create_record(user = Depends(require_role("admin"))):
 
 ---
 
+## 🚀 Deployment to Render
+
+This project is configured for **Render Blueprints**. This means you can deploy the entire stack (API + Database) in minutes.
+
+### Steps
+
+1.  **Push to GitHub:** Ensure your latest code is pushed to your GitHub repository.
+2.  **Create Blueprint:**
+    *   Log in to [Render](https://dashboard.render.com).
+    *   Click **New +** and select **Blueprint**.
+    *   Connect your GitHub repository.
+    *   Render will automatically detect the `render.yaml` file and set up the Web Service and PostgreSQL database.
+3.  **Wait for Build:** Render will build and deploy the app.
+4.  **Auto-Seed:** The app is configured to automatically seed the database with sample data on the first start. You can immediately log in with the test credentials below.
+
+### Accessing your public API
+Once deployed, your API will be available at:
+`https://your-app-name.onrender.com/docs`
+
+---
+
 ## 🗄️ Database
 
 ### PostgreSQL Setup
