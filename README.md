@@ -10,38 +10,38 @@ Built with **Python 3.12 / FastAPI / SQLAlchemy (async) / PostgreSQL / JWT**.
 
 ```
 src/
-├── main.py                    # App entry point (middleware, error handlers, routers)
-├── config.py                  # Environment settings (Pydantic BaseSettings)
-├── database.py                # Async SQLAlchemy engine + session dependency
+├── main.py                    
+├── config.py                  
+├── database.py                
 │
-├── models/                    # SQLAlchemy ORM models (database tables)
-│   ├── user.py                # User model (id, name, email, password, role, status)
-│   └── record.py              # FinancialRecord model (amount, type, category, date)
+├── models/                    
+│   ├── user.py                
+│   └── record.py              
 │
-├── schemas/                   # Pydantic schemas (request/response validation)
-│   ├── auth.py                # RegisterRequest, LoginRequest, TokenResponse
-│   ├── user.py                # UserResponse, UserUpdate, UserListResponse
-│   ├── record.py              # RecordCreate, RecordUpdate, RecordResponse
-│   └── dashboard.py           # SummaryResponse, TrendsResponse, etc.
+├── schemas/                   
+│   ├── auth.py                
+│   ├── user.py                
+│   ├── record.py              
+│   └── dashboard.py           
 │
-├── routers/                   # API route definitions (thin controllers)
-│   ├── auth.py                # POST /register, POST /login
-│   ├── users.py               # GET/PUT/DELETE /users (Admin only)
-│   ├── records.py             # CRUD /records (role-based)
-│   └── dashboard.py           # GET /dashboard/* (Analyst + Admin)
+├── routers/                   
+│   ├── auth.py                
+│   ├── users.py               
+│   ├── records.py             
+│   └── dashboard.py           
 │
-├── services/                  # Business logic layer
-│   ├── auth_service.py        # Registration, authentication
-│   ├── user_service.py        # User CRUD, role management
-│   ├── record_service.py      # Record CRUD, filtering, search
-│   └── dashboard_service.py   # Aggregation queries, trends
+├── services/                  
+│   ├── auth_service.py        
+│   ├── user_service.py        
+│   ├── record_service.py      
+│   └── dashboard_service.py   
 │
-├── dependencies/              # FastAPI Depends() functions
-│   └── auth.py                # get_current_user (JWT), require_role (RBAC)
+├── dependencies/              
+│   └── auth.py                
 │
 └── utils/
-    ├── errors.py              # AppError custom exception
-    └── security.py            # JWT encode/decode, bcrypt hashing
+    ├── errors.py              
+    └── security.py            
 ```
 
 ### Layered Architecture
@@ -82,7 +82,7 @@ cp .env.example .env
 # 4. Create the PostgreSQL database
 psql -U postgres -c "CREATE DATABASE finance_db;"
 
-# 5. Start the server (auto-creates tables + seeds sample data on first run)
+# 5. Start the server 
 uvicorn src.main:app --reload
 ```
 
@@ -117,13 +117,10 @@ uvicorn src.main:app --reload
 Access control is implemented via **FastAPI dependency injection**, not traditional middleware:
 
 ```python
-# Authentication: JWT → User object
 async def get_current_user(token = Depends(oauth2_scheme), db = Depends(get_db)) -> User
 
-# Authorization: Role check factory
 def require_role(*allowed_roles: str) → Depends(get_current_user) + role check
 
-# Usage in routes:
 @router.get("/records")
 async def list_records(user = Depends(require_role("viewer", "analyst", "admin"))):
 
@@ -186,10 +183,8 @@ async def create_record(user = Depends(require_role("admin"))):
 ### PostgreSQL Setup
 
 ```bash
-# Create the database
 psql -U postgres -c "CREATE DATABASE finance_db;"
 
-# Connection string format (set in .env)
 DATABASE_URL=postgresql+asyncpg://postgres:your_password@localhost:5432/finance_db
 ```
 
